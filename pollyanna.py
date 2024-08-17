@@ -1,12 +1,11 @@
 import boto3
-import sys
 
 def text_to_speech(text, output_file):
     # Inicializa o cliente do Amazon Polly
     polly_client = boto3.Session(
-        aws_access_key_id='YOUR_AWS_ACCESS_KEY',
-        aws_secret_access_key='YOUR_AWS_SECRET_KEY',
-        region_name='YOUR_AWS_REGION'
+        aws_access_key_id='',
+        aws_secret_access_key='',
+        region_name=''
     ).client('polly')
 
     try:
@@ -25,11 +24,31 @@ def text_to_speech(text, output_file):
     except Exception as e:
         print(f"Ocorreu um erro: {e}")
 
-if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print("Uso: python script.py 'Seu texto aqui'")
-        sys.exit(1)
-
-    input_text = sys.argv[1]
-    output_filename = 'output.mp3'
+def main():
+    print("Modo de operação:")
+    print("1: Leitura de arquivo")
+    print("2: Leitura direta do texto")
+    
+    mode = input("Escolha o modo (1 ou 2): ")
+    
+    if mode == '1':
+        file_path = input("Digite o caminho do arquivo de texto: ")
+        try:
+            with open(file_path, 'r') as file:
+                input_text = file.read()
+        except Exception as e:
+            print(f"Ocorreu um erro ao ler o arquivo: {e}")
+            return
+    elif mode == '2':
+        input_text = input("Digite o texto para conversão: ")
+    else:
+        print("Modo inválido. Use 1 para leitura de arquivo ou 2 para leitura direta.")
+        return
+    
+    output_filename = input("Digite o nome do arquivo de saída : " )
+    output_filename = output_filename + ".mp3"
     text_to_speech(input_text, output_filename)
+
+if __name__ == '__main__':
+    main()
+
